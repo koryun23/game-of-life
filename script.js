@@ -1,5 +1,5 @@
 let matrix = []
-function matrixGen(matY, matX, grass, grassEat, gazan) {
+function matrixGen(matY, matX, grass, grassEat, gazan,lake) {
     for (let i = 0; i < matY; i++) {
         matrix[i] = [];
         for (let j = 0; j < matX; j++) {
@@ -29,19 +29,26 @@ function matrixGen(matY, matX, grass, grassEat, gazan) {
             matrix[y][x] = 3;
         }
     }
-    for (let i = 0;i < matY;i++){
-        matrix[i][matX] = -1
+    for(let i = 0;i< lake;i++){
+        var y = Math.floor(Math.random() * matY)
+        var x = Math.floor(Math.random() * matX)
+        if (matrix[y][x] == 0) {
+            matrix[y][x] = 4;
+        }
     }
 }
-matrixGen(40, 41, 1000, 500, 50); // էստեղ էլ կանրում ենք ֆունկցիան 
+
+matrixGen(40, 40, 1000, 500, 50,10); // էստեղ էլ կանրում ենք ֆունկցիան 
+
 let grassArr = []
 let grassEaterArr = []
 let predatorArr = []
+let switcherArr = []
 let side = 15;
 function setup(){
     createCanvas(matrix[0].length * side,matrix.length*side);
-    background('grey');
-    frameRate(5)
+    background('black');
+    frameRate(10)
     for(let y = 0;y < matrix.length;y++){
         for(let x = 0; x < matrix[y].length;x++){
             if (matrix[y][x] == 1){
@@ -58,6 +65,10 @@ function setup(){
                 predatorArr.push(newPredator)
 
             }
+            else if(matrix[y][x] == 4){
+                let newSwitcher = new Switcher(x,y)
+                switcherArr.push(newSwitcher)
+            }
         }
     }
 }
@@ -70,14 +81,15 @@ function draw(){
             }
             else if(matrix[y][x] == 1){
                 fill('green')
-            }else if(matrix[y][x] == 2){
+            }
+            else if(matrix[y][x] == 2){
                 fill('yellow')
             }
             else if(matrix[y][x] == 3){
                 fill('red')
             }
-            else if(matrix[y][x] == -1){
-                fill('lightblue')
+            else if(matrix[y][x] == 4){
+                fill('blue')
             }
             rect(x*side,y*side,side,side)
         }
@@ -96,25 +108,18 @@ function draw(){
     for(let i = 0;i < grassEaterArr.length;i++){
         grassEaterArr[i].mul(); 
         grassEaterArr[i].eat(); 
-        
-
     }
+    for(let i = 0;i<switcherArr.length;i++){
+        switcherArr[i].move()
+        switcherArr[i].switch()
+    }
+
     gen = Math.floor(Math.random()* 15)
-    if(gen == 1){
+    if(gen == 10){
         tsunami = new Tsunami()
         tsunami.destroy()
-        console.log('DESTROYED')
     }
-    // newY = Math.floor(Math.random()*41)
-    // d = new Destroyer(41,newY)
-    // for(let i = 0;i<42;i++){
-    //     d.move_to_left()
-    // }
-    // // for(let i = 0;i<42;i++){
-    // //     d.move_to_right()
-    // // }
 
-    // // 
 
 
 }
