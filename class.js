@@ -294,7 +294,6 @@ class Switcher{
         return emptyCell
     }
     move(){
-        this.getCoords()
         let emptyCell0 = this.chooseCell(0)
         let emptyCell1 = this.chooseCell(1)
         let emptyCell2 = this.chooseCell(2)
