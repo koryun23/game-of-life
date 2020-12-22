@@ -274,14 +274,6 @@ class Switcher{
             [this.x + 1, this.y + 1]
         ]
     }
-    is_connected(){
-        for(let i = 0;i< this.directions.length;i++){
-            if (this.directions[i] == 4){
-                this.connected = true
-            }
-        }
-        return this.connected
-    }
     chooseCell(ch) {
         this.getCoords()
         var found = [];
@@ -302,7 +294,7 @@ class Switcher{
         return emptyCell
     }
     move(){
-        
+        this.getCoords()
         let emptyCell0 = this.chooseCell(0)
         let emptyCell1 = this.chooseCell(1)
         let emptyCell2 = this.chooseCell(2)
