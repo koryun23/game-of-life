@@ -288,34 +288,33 @@ class Switcher{
         }
         return found;
     }
-    choose_rand_place(ch){
-        let emptyCells = this.chooseCell(ch)
-        let emptyCell = emptyCells[Math.floor(Math.random() * emptyCells.length)]
-        return emptyCell
-    }
+
     move(){
         let emptyCell0 = this.chooseCell(0)
         let emptyCell1 = this.chooseCell(1)
         let emptyCell2 = this.chooseCell(2)
         let emptyCell3 = this.chooseCell(3)
-        let emptyCell = emptyCell0.concat(emptyCell1,emptyCell2,emptyCell3);
-        let newX = emptyCell[0]; 
-        let newY = emptyCell[1]; 
-        matrix[this.y][this.x] = 0;
-        matrix[newY][newX] = 4; 
-
-        this.x = newX 
-        this.y = newY 
-        
-    }
-    switch(){
-        let gen = Math.floor(Math.random()*11)
-        if(gen == 10){
+        let emptyCells = emptyCell0.concat(emptyCell1,emptyCell2,emptyCell3);
+        let emptyCell = emptyCells[Math.floor(Math.random()*emptyCells.length)]
+        let newY = emptyCell[1]
+        let newX = emptyCell[0]
+        if(matrix[newY][newX] == 0){
+            matrix[this.y][this.x] = 0
+            matrix[newY][newX] = 4
+            this.y = newY
+            this.x = newX
+        }
+        if(matrix[newY][newX] == 1){
+            matrix[this.y][this.x] = 1
+            matrix[newY][newX] = 4
+            this.y = newY
+            this.x = newX
             for(let i = 0; i < grassArr.length; i++){
-                if(grassArr[i].x == this.x && grassArr[i].y == this.y){
+                if(grassArr[i].x == newX && grassArr[i].y == newY){
                     grassArr.splice(i,1)
-                    let newX = this.choose_rand_place(0)[0]
-                    let newY = this.choose_rand_place(0)[1]
+                    let newCell = emptyCells[Math.floor(Math.random()*emptyCells.length)]
+                    let newX = newCell[0]
+                    let newY = newCell[1]
                     if(grassEaterArr.length < predatorArr.length){
                         let newGrassEater = new GrassEater(newX,newY)
                         grassEaterArr.push(newGrassEater)
@@ -327,16 +326,23 @@ class Switcher{
                     }
                 }  
             } 
+        }
+        else if(matrix[newY][newX] == 2){
+            matrix[this.y][this.x] = 2
+            matrix[newY][newX] = 4
+            this.y = newY
+            this.x = newX
             for(let i = 0;i<grassEaterArr.length;i++){
-                if(grassEaterArr[i].x == this.x && grassEaterArr[i].y == this.y){
+                if(grassEaterArr[i].x == newX && grassEaterArr[i].y == newY){
                     grassEaterArr.splice(i,1)
-                    let newX = this.choose_rand_place(0)[0]
-                    let newY = this.choose_rand_place(0)[1]
+                    let newCell = emptyCells[Math.floor(Math.random()*emptyCells.length)]
+                    let newX = newCell[0]
+                    let newY = newCell[1]
                     if(grassArr.length < predatorArr.length){
                         let newGrass = new Grass(newX,newY)
                         grassArr.push(newGrass)
                         console.log('grass eater --> grass ')
-
+    
                     }else{
                         let newPredator = new Predator(newX,newY)
                         predatorArr.push(newPredator)
@@ -345,11 +351,18 @@ class Switcher{
                 }
                 
             }
+        }
+        else if(matrix[newY][newX] == 3){
+            matrix[this.y][this.x] = 3
+            matrix[newY][newX] = 4
+            this.y = newY
+            this.x = newX
             for(let i = 0;i< predatorArr.length;i++){
-                if(predatorArr[i].x == this.x && predatorArr[i].y == this.y){
+                if(predatorArr[i].x == newX && predatorArr[i].y == newY){
                     predatorArr.splice(i,1)
-                    let newX = this.choose_rand_place(0)[0]
-                    let newY = this.choose_rand_place(0)[1]
+                    let newCell = emptyCells[Math.floor(Math.random()*emptyCells.length)]
+                    let newX = newCell[0]
+                    let newY = newCell[1]
                     if(grassArr.length < grassEaterArr.length){
                         let newGrass = new Grass(newX,newY)
                         grassArr.push(newGrass)
@@ -362,8 +375,7 @@ class Switcher{
                 }
             }
         }
-
-    }
+    } 
     
 }
 class Tsunami{
@@ -403,18 +415,8 @@ class Tsunami{
                     }
                     matrix[y][x] = 0
                 }
-                // else if(matrix[y][x] == 4){
-                //     matrix[y][x] = 0
-                //     while(matrix[y][x] != 0){
-                //         y = Math.floor(Math.random()*matrix.length)
-                //         x = Math.floor(Math.random()*matrix[y].length)
-                //     }
-                //     matrix[y][x] = 4
-                // }
-                
             }
         }
-        //return true
     }
 }
 

@@ -38,7 +38,7 @@ function matrixGen(matY, matX, grass, grassEat, gazan,lake) {
     }
 }
 
-matrixGen(40, 40, 1000, 500, 50,10); // էստեղ էլ կանրում ենք ֆունկցիան 
+matrixGen(40, 40, 1000, 500, 50,20); // էստեղ էլ կանրում ենք ֆունկցիան 
 
 let grassArr = []
 let grassEaterArr = []
