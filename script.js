@@ -111,7 +111,6 @@ function draw(){
     }
     for(let i = 0;i<switcherArr.length;i++){
         switcherArr[i].move()
-        switcherArr[i].switch()
     }
 
     gen = Math.floor(Math.random()* 15)
