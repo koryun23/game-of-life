@@ -260,7 +260,7 @@ class Switcher{
         this.y = y
         this.directions = []
         this.moving = true
-        this.connected = false
+        this.freeze_time = 0
     }
     getCoords(){
         this.directions = [
@@ -290,93 +290,112 @@ class Switcher{
     }
 
     move(){
-        let emptyCell0 = this.chooseCell(0)
-        let emptyCell1 = this.chooseCell(1)
-        let emptyCell2 = this.chooseCell(2)
-        let emptyCell3 = this.chooseCell(3)
-        let emptyCells = emptyCell0.concat(emptyCell1,emptyCell2,emptyCell3);
-        let emptyCell = emptyCells[Math.floor(Math.random()*emptyCells.length)]
-        let newY = emptyCell[1]
-        let newX = emptyCell[0]
-        if(matrix[newY][newX] == 0){
-            matrix[this.y][this.x] = 0
-            matrix[newY][newX] = 4
-            this.y = newY
-            this.x = newX
-        }
-        if(matrix[newY][newX] == 1){
-            matrix[this.y][this.x] = 1
-            matrix[newY][newX] = 4
-            this.y = newY
-            this.x = newX
-            for(let i = 0; i < grassArr.length; i++){
-                if(grassArr[i].x == newX && grassArr[i].y == newY){
-                    grassArr.splice(i,1)
-                    let newCell = emptyCells[Math.floor(Math.random()*emptyCells.length)]
-                    let newX = newCell[0]
-                    let newY = newCell[1]
-                    if(grassEaterArr.length < predatorArr.length){
-                        let newGrassEater = new GrassEater(newX,newY)
-                        grassEaterArr.push(newGrassEater)
-                        console.log('grass --> grass eater')
-                    }else{
-                        let newPredator = new Predator(newX,newY)
-                        predatorArr.push(newPredator)
-                        console.log('grass --> predator')
-                    }
-                }  
-            } 
-        }
-        else if(matrix[newY][newX] == 2){
-            matrix[this.y][this.x] = 2
-            matrix[newY][newX] = 4
-            this.y = newY
-            this.x = newX
-            for(let i = 0;i<grassEaterArr.length;i++){
-                if(grassEaterArr[i].x == newX && grassEaterArr[i].y == newY){
-                    grassEaterArr.splice(i,1)
-                    let newCell = emptyCells[Math.floor(Math.random()*emptyCells.length)]
-                    let newX = newCell[0]
-                    let newY = newCell[1]
-                    if(grassArr.length < predatorArr.length){
-                        let newGrass = new Grass(newX,newY)
-                        grassArr.push(newGrass)
-                        console.log('grass eater --> grass ')
-    
-                    }else{
-                        let newPredator = new Predator(newX,newY)
-                        predatorArr.push(newPredator)
-                        console.log('grass eater --> predator')
-                    }
-                }
-                
+        // this.getCoords()
+        if(this.moving){
+            let emptyCell0 = this.chooseCell(0)
+            let emptyCell1 = this.chooseCell(1)
+            let emptyCell2 = this.chooseCell(2)
+            let emptyCell3 = this.chooseCell(3)
+            let emptyCells = emptyCell0.concat(emptyCell1,emptyCell2,emptyCell3);
+            let emptyCell = emptyCells[Math.floor(Math.random()*emptyCells.length)]
+            let newY = emptyCell[1]
+            let newX = emptyCell[0]
+            if(matrix[newY][newX] == 0){
+                matrix[this.y][this.x] = 0
+                matrix[newY][newX] = 4
+                this.y = newY
+                this.x = newX
             }
-        }
-        else if(matrix[newY][newX] == 3){
-            matrix[this.y][this.x] = 3
-            matrix[newY][newX] = 4
-            this.y = newY
-            this.x = newX
-            for(let i = 0;i< predatorArr.length;i++){
-                if(predatorArr[i].x == newX && predatorArr[i].y == newY){
-                    predatorArr.splice(i,1)
-                    let newCell = emptyCells[Math.floor(Math.random()*emptyCells.length)]
-                    let newX = newCell[0]
-                    let newY = newCell[1]
-                    if(grassArr.length < grassEaterArr.length){
-                        let newGrass = new Grass(newX,newY)
-                        grassArr.push(newGrass)
-                        console.log('predator --> grass')
-                    }else{
-                        let newGrassEater = new GrassEater(newX,newY)
-                        grassEaterArr.push(newGrassEater)
-                        console.log('predator --> grass eater')
+            else if(matrix[newY][newX] == 1){
+                matrix[this.y][this.x] = 0
+                matrix[newY][newX] = 4
+                this.y = newY
+                this.x = newX
+                for(let i = 0; i < grassArr.length; i++){
+                    if(grassArr[i].x == newX && grassArr[i].y == newY){
+                        grassArr.splice(i,1)
+                        let emptyCells = this.chooseCell(0)
+                        if(emptyCells){
+                            let newCell = emptyCells[Math.floor(Math.random()*emptyCells.length)]
+                            let newX = newCell[0]
+                            let newY = newCell[1]
+                            if(grassEaterArr.length < predatorArr.length){
+                                let newGrassEater = new GrassEater(newX,newY)
+                                grassEaterArr.push(newGrassEater)
+                                console.log('grass --> grass eater')
+                            }else{
+                                let newPredator = new Predator(newX,newY)
+                                predatorArr.push(newPredator)
+                                console.log('grass --> predator')
+                            }
+                        }
+                    }  
+                } 
+            }
+            else if(matrix[newY][newX] == 2){
+                matrix[this.y][this.x] = 0
+                matrix[newY][newX] = 4
+                this.y = newY
+                this.x = newX
+                for(let i = 0;i<grassEaterArr.length;i++){
+                    if(grassEaterArr[i].x == newX && grassEaterArr[i].y == newY){
+                        grassEaterArr.splice(i,1)
+                        let emptyCells = this.chooseCell(0)
+                        if(emptyCells){
+                            let newCell = emptyCells[Math.floor(Math.random()*emptyCells.length)]
+                            let newX = newCell[0]
+                            let newY = newCell[1]
+                            if(grassArr.length < predatorArr.length){
+                                let newGrass = new Grass(newX,newY)
+                                grassArr.push(newGrass)
+                                console.log('grass eater --> grass ')
+            
+                            }else{
+                                let newPredator = new Predator(newX,newY)
+                                predatorArr.push(newPredator)
+                                console.log('grass eater --> predator')
+                            }
+                        }
                     }
+                    
                 }
             }
+            else if(matrix[newY][newX] == 3){
+                matrix[this.y][this.x] = 0
+                matrix[newY][newX] = 4
+                this.y = newY
+                this.x = newX
+                for(let i = 0;i< predatorArr.length;i++){
+                    if(predatorArr[i].x == newX && predatorArr[i].y == newY){
+                        predatorArr.splice(i,1)
+                        let emptyCells = this.chooseCell(0)
+                        if(emptyCells){
+                            let newCell = emptyCells[Math.floor(Math.random()*emptyCells.length)]
+                            let newX = newCell[0]
+                            let newY = newCell[1]
+                            if(grassArr.length < grassEaterArr.length){
+                                let newGrass = new Grass(newX,newY)
+                                grassArr.push(newGrass)
+                                console.log('predator --> grass')
+                            }else{
+                                let newGrassEater = new GrassEater(newX,newY)
+                                grassEaterArr.push(newGrassEater)
+                                console.log('predator --> grass eater')
+                            }
+                        }
+                    }
+                }
+            }
+            
         }
-    } 
-    
+        else{
+            setTimeout(this.is_moving.bind(this), 5000)
+        }
+    }
+    is_moving(){
+        this.moving = true
+    }
+
 }
 class Tsunami{
     getInteger(min, max) {
@@ -385,7 +404,7 @@ class Tsunami{
 
     destroy(){
         var y1 = this.getInteger(0,matrix[0].length/2)
-        var y2 = this.getInteger(matrix[0].length/2,40)
+        var y2 = this.getInteger(matrix[0].length/2,matrix[0].length)
         var x1 = this.getInteger(0,matrix.length/2)
         var x2 = this.getInteger(matrix.length/2,matrix.length)
         for(let y = y1; y <= y2; y++){
@@ -414,6 +433,14 @@ class Tsunami{
                         }
                     }
                     matrix[y][x] = 0
+                }
+                else{
+                    // console.log('TSUNAMI HIT THE SWITCHER')
+                    for(let i = 0;i<switcherArr.length;i++){
+                        if(switcherArr[i].x == x & switcherArr[i].y == y){
+                            switcherArr[i].moving = false
+                        }
+                    }
                 }
             }
         }
